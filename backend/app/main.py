@@ -1,5 +1,10 @@
 from fastapi import FastAPI
 from .models import SecurityEvent
+from .detector import (
+    detect_brute_force,
+    detect_success_after_failures,
+    detect_multiple_sources,
+)
 
 app = FastAPI(
     title="SOC-Nexus API",
@@ -26,7 +31,17 @@ def health_check():
 
 @app.post("/events")
 def ingest_event(event: SecurityEvent):
+    alerts = []
+
+    # Run detection rules against the submitted event.
+    event_history = [event]
+
+    alerts.extend(detect_brute_force(event_history))
+    alerts.extend(detect_success_after_failures(event_history))
+    alerts.extend(detect_multiple_sources(event_history))
+
     return {
         "status": "accepted",
         "event": event,
+        "alerts": alerts,
     }
