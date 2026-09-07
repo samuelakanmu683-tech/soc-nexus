@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from .models import SecurityEvent
 
 app = FastAPI(
     title="SOC-Nexus API",
@@ -20,4 +21,12 @@ def root():
 def health_check():
     return {
         "status": "healthy"
+    }
+
+
+@app.post("/events")
+def ingest_event(event: SecurityEvent):
+    return {
+        "status": "accepted",
+        "event": event,
     }
