@@ -5,6 +5,7 @@ from .detector import (
     detect_success_after_failures,
     detect_multiple_sources,
 )
+from .storage import add_event, get_events
 
 app = FastAPI(
     title="SOC-Nexus API",
@@ -31,10 +32,11 @@ def health_check():
 
 @app.post("/events")
 def ingest_event(event: SecurityEvent):
-    alerts = []
+    add_event(event)
 
-    # Run detection rules against the submitted event.
-    event_history = [event]
+    event_history = get_events()
+
+    alerts = []
 
     alerts.extend(detect_brute_force(event_history))
     alerts.extend(detect_success_after_failures(event_history))
@@ -44,4 +46,13 @@ def ingest_event(event: SecurityEvent):
         "status": "accepted",
         "event": event,
         "alerts": alerts,
+        "total_events": len(event_history),
+    }
+
+
+@app.get("/events")
+def list_events():
+    return {
+        "total": len(get_events()),
+        "events": get_events(),
     }
