@@ -1,5 +1,6 @@
-from pydantic import BaseModel
 from datetime import datetime
+
+from pydantic import BaseModel
 
 
 class SecurityEvent(BaseModel):
@@ -9,3 +10,13 @@ class SecurityEvent(BaseModel):
     event_type: str
     status: str
     message: str
+
+
+class SecurityAlert(BaseModel):
+    rule_id: str
+    severity: str
+    title: str
+    description: str
+    source_ip: str | None = None
+    username: str | None = None
+    evidence_count: int = 0
