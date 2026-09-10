@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from backend.app.detector import (
+    analyze_events,
     detect_brute_force,
     detect_multiple_sources,
     detect_success_after_failures,
@@ -63,3 +64,16 @@ def test_detect_multiple_sources():
     assert len(alerts) == 1
     assert alerts[0]["rule_id"] == "AUTH-003"
     assert alerts[0]["severity"] == "MEDIUM"
+def test_analyze_events():
+    events = [
+        create_event("203.0.113.50", "admin", "failed"),
+        create_event("203.0.113.50", "admin", "failed"),
+        create_event("203.0.113.50", "admin", "failed"),
+        create_event("203.0.113.50", "admin", "failed"),
+        create_event("203.0.113.50", "admin", "failed"),
+    ]
+
+    alerts = analyze_events(events)
+
+    assert len(alerts) == 1
+    assert alerts[0]["rule_id"] == "AUTH-001"
