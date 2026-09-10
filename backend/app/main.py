@@ -1,20 +1,23 @@
 from fastapi import FastAPI
-from app.models import SecurityEvent
-from app.detector import analyze_event
+
+from .models import SecurityEvent
+from .detector import analyze_events
+from .storage import add_event, get_events
+
 
 app = FastAPI(
-    title="SOC-NEXUS",
-    description="Security Operations Center event detection API",
-    version="1.0.0",
+    title="SOC-Nexus API",
+    description="Security Operations Center platform for threat detection and incident response.",
+    version="0.1.0",
 )
 
 
 @app.get("/")
 def root():
     return {
-        "name": "SOC-NEXUS",
+        "name": "SOC-Nexus",
         "status": "online",
-        "description": "Security Operations Center event detection platform",
+        "version": "0.1.0",
     }
 
 
@@ -25,11 +28,24 @@ def health_check():
     }
 
 
-@app.post("/events/analyze")
-def analyze_security_event(event: SecurityEvent):
-    result = analyze_event(event)
+@app.post("/events")
+def ingest_event(event: SecurityEvent):
+    add_event(event)
+
+    event_history = get_events()
+    alerts = analyze_events(event_history)
 
     return {
+        "status": "accepted",
         "event": event,
-        "analysis": result,
+        "alerts": alerts,
+        "total_events": len(event_history),
+    }
+
+
+@app.get("/events")
+def list_events():
+    return {
+        "total": len(get_events()),
+        "events": get_events(),
     }
