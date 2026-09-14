@@ -98,7 +98,10 @@ def detect_multiple_sources(events: List[SecurityEvent]) -> List[dict]:
                 }
             )
 
-    return alertsdef analyze_events(events: List[SecurityEvent]) -> List[dict]:
+        return alerts
+
+
+def analyze_events(events: List[SecurityEvent]) -> List[dict]:
     """Run all detection rules against a collection of security events."""
 
     alerts = []
