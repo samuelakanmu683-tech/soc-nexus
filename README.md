@@ -120,19 +120,19 @@ Three different source IP addresses targeting the same account generated a MEDIU
 
 Five failed SSH authentication attempts from the same source generated a HIGH severity alert.
 
-![AUTH-001 SSH Brute Force](auth-001-brute-force.png)
+![AUTH-001 SSH Brute Force](auth-001-brute-force.png.png)
 
 ### AUTH-002 — Successful Login Following Repeated Failures
 
 A successful login following repeated failed authentication attempts generated a HIGH severity alert.
 
-![AUTH-002 Successful Login](auth-002-success-after-failures.png)
+![AUTH-002 Successful Login](auth-002-success-after-failures.png.png)
 
 ### AUTH-003 — Multiple Sources Targeting Account
 
 Three different source IP addresses targeting the same account generated a MEDIUM severity alert.
 
-![AUTH-003 Multiple Sources](auth-003-multiple-sources.png)
+![AUTH-003 Multiple Sources](auth-003-multiple-sources.png.png)
 Security Considerations
 
 This project uses simulated security events for demonstration and educational purposes.
